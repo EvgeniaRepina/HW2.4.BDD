@@ -10,10 +10,10 @@ import ru.netology.web.page.VerificationPage;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MoneyTransferTest {
+class MoneyTransferNegativeZeroTest {
 
     @Test
-    void ShouldTopupFirstCard_AllValue_NotEmptyBalanceOfEachCard() {
+    void ShouldTopupFirstCard_PositiveValue_FromNotEmptyCardToEmpty() {
 
         open("http://localhost:9999");
         LoginPageV1 loginPage = new LoginPageV1(); // создали страницу
@@ -23,10 +23,13 @@ class MoneyTransferTest {
         verificationPage.validVerify(verificationCode);// ввели код, нажали отправить
         DashboardPage dashboardPage = new DashboardPage(); // создали страницу
 
-        dashboardPage.depositFirstCardByBalance(DataHelper.getSecondCardInfo()); // заполнили поля, нажали отправить
+        dashboardPage.depositSecondCardByBalance(DataHelper.getFirstCardInfo()); // заполнили поля, нажали отправить
 
-        int expectedFirstCard = 20000;
-        int expectedSecondCard = 0;
+        int expectedFirstCard = 1;
+        int expectedSecondCard = 19999;
+
+        dashboardPage.setValue("1");
+        dashboardPage.depositFirstCard(DataHelper.getSecondCardInfo()); // заполнили поля, нажали отправить
 
         DashboardPage dashboardPage2 = new DashboardPage();
         int actualFirstCard = dashboardPage2.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390-206f6b1f56c0\"]");
@@ -34,19 +37,7 @@ class MoneyTransferTest {
 
         assertEquals(expectedFirstCard, actualFirstCard);
         assertEquals(expectedSecondCard, actualSecondCard);
+
     }
 
-//    @Test
-//    void shouldFillTheWebsite() {
-//
-//        open("http://localhost:9999");
-//        LoginPageV1 loginPage = new LoginPageV1(); // создали страницу
-//        DataHelper.AuthInfo authInfo = DataHelper.getAuthInfo(); // взяли инфу
-//        VerificationPage verificationPage = loginPage.validLogin(authInfo); // заполнили поля для логина, нажали отправить
-//
-//        DataHelper.VerificationCode verificationCode = DataHelper.getVerificationCodeFor(authInfo); //взяли код
-//        verificationPage.validVerify(verificationCode);// ввели код, нажали отправить
-//        DashboardPage dashboardPage = new DashboardPage(); // создали страницу
-//    }
 }
-

@@ -28,6 +28,7 @@ public class DataHelper {
     public static class CardInfo {
         private String cardNumber;
         private String cardBalance;
+
     }
 
     public static CardInfo getFirstCardInfo() {
@@ -40,17 +41,17 @@ public class DataHelper {
 
     @Value
     public static class PreBalanceInfo {
-        static DashboardPage dashboardPage = new DashboardPage();
-        private static int balanceFirstCard = dashboardPage.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390" +
+        DashboardPage dashboardPage = new DashboardPage();
+        private int balanceFirstCard = dashboardPage.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390" +
                 "-206f6b1f56c0\"]");
-        private static int balanceSecondCard = dashboardPage.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287" +
+        private int balanceSecondCard = dashboardPage.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287" +
                 "-09f7a039391d\"]");
 
-        public static int getBalanceFirstCard() {
+        public int getBalanceFirstCard() {
             return balanceFirstCard;
         }
 
-        public static int getBalanceSecondCard() {
+        public int getBalanceSecondCard() {
             return balanceSecondCard;
         }
     }
