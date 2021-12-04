@@ -49,15 +49,20 @@ public class DashboardPage {
         $("[data-test-id=amount] input").setValue(balance);
         $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=from] input").setValue(info.getCardNumber());
         $("[data-test-id=action-transfer]").click();
         return new CheckBalancePage();
     }
+
     public CheckBalancePage depositSecondCard(DataHelper.CardInfo info) {
         $("[data-test-id=\"0f3f5c2a-249e-4c3d-8287-09f7a039391d\"] button").click();
         $("[data-test-id=amount] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=amount] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=amount] input").setValue(value);
+        $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=from] input").setValue(info.getCardNumber());
@@ -75,15 +80,17 @@ public class DashboardPage {
         $("[data-test-id=amount] input").setValue(balance);
         $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id=from] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=from] input").setValue(info.getCardNumber());
         $("[data-test-id=action-transfer]").click();
         return new CheckBalancePage();
     }
+
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
 
     public int getCardBalance(String id) {
-        // TODO: перебрать все карты и найти по атрибуту data-test-id
         String text = $(id).getText();
         return extractBalance(text);
     }
