@@ -1,7 +1,6 @@
 package ru.netology.web.data;
 
 import lombok.Value;
-import ru.netology.web.page.DashboardPage;
 
 public class DataHelper {
 
@@ -28,49 +27,24 @@ public class DataHelper {
     public static class CardInfo {
         private String cardNumber;
         private String cardBalance;
-
     }
 
     public static CardInfo getFirstCardInfo() {
         return new CardInfo("5559000000000001", "10000");
     }
+
     public static CardInfo getSecondCardInfo() {
         return new CardInfo("5559000000000002", "10000");
     }
 
+    private static String firstCardId = "[data-test-id=\"92df3f1c-a033-48e6-8390-206f6b1f56c0\"]";
+    private static String secondCardId = "[data-test-id=\"0f3f5c2a-249e-4c3d-8287-09f7a039391d\"]";
 
-    @Value
-    public static class PreBalanceInfo {
-        DashboardPage dashboardPage = new DashboardPage();
-        private int balanceFirstCard = dashboardPage.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390" +
-                "-206f6b1f56c0\"]");
-        private int balanceSecondCard = dashboardPage.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287" +
-                "-09f7a039391d\"]");
-
-        public int getBalanceFirstCard() {
-            return balanceFirstCard;
-        }
-
-        public int getBalanceSecondCard() {
-            return balanceSecondCard;
-        }
+    public static String getFirstCardId() {
+        return firstCardId;
     }
-
-    @Value
-    public static class PostBalanceInfo {
-        static DashboardPage dashboardPage = new DashboardPage();
-        private static int balanceFirstCard = dashboardPage.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390" +
-                "-206f6b1f56c0\"]");
-        private static int balanceSecondCard = dashboardPage.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287" +
-                "-09f7a039391d\"]");
-
-        public static int getBalanceFirstCard() {
-            return balanceFirstCard;
-        }
-
-        public static int getBalanceSecondCard() {
-            return balanceSecondCard;
-        }
+    public static String getSecondCardId() {
+        return secondCardId;
     }
 }
 

@@ -3,9 +3,9 @@ package ru.netology.web.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.web.data.DataHelper;
-import ru.netology.web.data.DataHelper.PreBalanceInfo;
 import ru.netology.web.page.DashboardPage;
 import ru.netology.web.page.LoginPageV1;
+import ru.netology.web.page.MoneyTtransferPage;
 import ru.netology.web.page.VerificationPage;
 
 import static com.codeborne.selenide.Selenide.open;
@@ -15,34 +15,27 @@ class MoneyTransferFirstCardTest {
 
     @BeforeEach
     void setup() {
-        open("http://localhost:9999");
-        LoginPageV1 loginPage = new LoginPageV1();
+        LoginPageV1 loginPage = open("http://localhost:9999", LoginPageV1.class); // создаем страницу одновременно с
+        // ее открытием
         DataHelper.AuthInfo authInfo = DataHelper.getAuthInfo();
         VerificationPage verificationPage = loginPage.validLogin(authInfo);
         DataHelper.VerificationCode verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         verificationPage.validVerify(verificationCode);
-        DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.depositSecondCardByBalance(DataHelper.getFirstCardInfo());
-        dashboardPage.setValue("10000");
-        dashboardPage.depositFirstCard(DataHelper.getSecondCardInfo());
+        MoneyTtransferPage.depositSecondCardByBalance(DataHelper.getFirstCardInfo());
+
+        MoneyTtransferPage.depositFirstCard(DataHelper.getSecondCardInfo(), "10000");
     }
 
     @Test
     void ShouldTopupFirstCard_PreBoundValue_NotEmptyBalanceOfEachCard() {
+        int expectedFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId()) + 1;
+        int expectedSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId()) - 1;
 
-        DashboardPage dashboardPage = new DashboardPage();
-        PreBalanceInfo preBalanceInfo = new PreBalanceInfo();
+        MoneyTtransferPage.depositFirstCard(DataHelper.getSecondCardInfo(),"-1");
 
-        int expectedFirstCard = preBalanceInfo.getBalanceFirstCard() + 1;
-        int expectedSecondCard = preBalanceInfo.getBalanceSecondCard() - 1;
-
-        dashboardPage.setValue("-1");
-        dashboardPage.depositFirstCard(DataHelper.getSecondCardInfo());
-
-        DashboardPage dashboardPage2 = new DashboardPage();
-        int actualFirstCard = dashboardPage2.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390-206f6b1f56c0\"]");
-        int actualSecondCard = dashboardPage2.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287-09f7a039391d\"]");
+        int actualFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int actualSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
 
         assertEquals(expectedFirstCard, actualFirstCard);
         assertEquals(expectedSecondCard, actualSecondCard);
@@ -50,39 +43,26 @@ class MoneyTransferFirstCardTest {
 
     @Test
     void ShouldTopupFirstCard_ZeroValue_NotEmptyBalanceOfEachCard() {
+        int expectedFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int expectedSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
 
-        DashboardPage dashboardPage = new DashboardPage();
-        PreBalanceInfo preBalanceInfo = new PreBalanceInfo();
+        MoneyTtransferPage.depositFirstCard(DataHelper.getSecondCardInfo(),"0");
 
-        int expectedFirstCard = preBalanceInfo.getBalanceFirstCard();
-        int expectedSecondCard = preBalanceInfo.getBalanceSecondCard();
-
-        dashboardPage.setValue("0");
-        dashboardPage.depositFirstCard(DataHelper.getSecondCardInfo());
-
-        DashboardPage dashboardPage2 = new DashboardPage();
-        int actualFirstCard = dashboardPage2.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390-206f6b1f56c0\"]");
-        int actualSecondCard = dashboardPage2.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287-09f7a039391d\"]");
-
+        int actualFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int actualSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
         assertEquals(expectedFirstCard, actualFirstCard);
         assertEquals(expectedSecondCard, actualSecondCard);
     }
 
     @Test
     void ShouldTopupFirstCard_PostBoundValue_NotEmptyBalanceOfEachCard() {
+        int expectedFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId()) + 1;
+        int expectedSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId()) - 1;
 
-        DashboardPage dashboardPage = new DashboardPage();
-        PreBalanceInfo preBalanceInfo = new PreBalanceInfo();
+        MoneyTtransferPage.depositFirstCard(DataHelper.getSecondCardInfo(),"1");
 
-        int expectedFirstCard = preBalanceInfo.getBalanceFirstCard() + 1;
-        int expectedSecondCard = preBalanceInfo.getBalanceSecondCard() - 1;
-
-        dashboardPage.setValue("1");
-        dashboardPage.depositFirstCard(DataHelper.getSecondCardInfo());
-
-        DashboardPage dashboardPage2 = new DashboardPage();
-        int actualFirstCard = dashboardPage2.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390-206f6b1f56c0\"]");
-        int actualSecondCard = dashboardPage2.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287-09f7a039391d\"]");
+        int actualFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int actualSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
 
         assertEquals(expectedFirstCard, actualFirstCard);
         assertEquals(expectedSecondCard, actualSecondCard);
@@ -91,18 +71,13 @@ class MoneyTransferFirstCardTest {
     @Test
     void ShouldTopupFirstCard_PositiveValue_NotEmptyBalanceOfEachCard() {
 
-        DashboardPage dashboardPage = new DashboardPage();
-        PreBalanceInfo preBalanceInfo = new PreBalanceInfo();
+        int expectedFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId()) + 100;
+        int expectedSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId()) - 100;
 
-        int expectedFirstCard = preBalanceInfo.getBalanceFirstCard() + 100;
-        int expectedSecondCard = preBalanceInfo.getBalanceSecondCard() - 100;
+        MoneyTtransferPage.depositFirstCard(DataHelper.getSecondCardInfo(),"100");
 
-        dashboardPage.setValue("100");
-        dashboardPage.depositFirstCard(DataHelper.getSecondCardInfo());
-
-        DashboardPage dashboardPage2 = new DashboardPage();
-        int actualFirstCard = dashboardPage2.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390-206f6b1f56c0\"]");
-        int actualSecondCard = dashboardPage2.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287-09f7a039391d\"]");
+        int actualFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int actualSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
 
         assertEquals(expectedFirstCard, actualFirstCard);
         assertEquals(expectedSecondCard, actualSecondCard);
@@ -111,18 +86,13 @@ class MoneyTransferFirstCardTest {
     @Test
     void ShouldTopupFirstCard_OverValue_NotEmptyBalanceOfEachCard() {
 
-        DashboardPage dashboardPage = new DashboardPage();
-        PreBalanceInfo preBalanceInfo = new PreBalanceInfo();
+        int expectedFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int expectedSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
 
-        int expectedFirstCard = preBalanceInfo.getBalanceFirstCard();
-        int expectedSecondCard = preBalanceInfo.getBalanceSecondCard();
+        MoneyTtransferPage.depositFirstCard(DataHelper.getSecondCardInfo(),"17845");
 
-        dashboardPage.setValue("17845");
-        dashboardPage.depositFirstCard(DataHelper.getSecondCardInfo());
-
-        DashboardPage dashboardPage2 = new DashboardPage();
-        int actualFirstCard = dashboardPage2.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390-206f6b1f56c0\"]");
-        int actualSecondCard = dashboardPage2.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287-09f7a039391d\"]");
+        int actualFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int actualSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
 
         assertEquals(expectedFirstCard, actualFirstCard);
         assertEquals(expectedSecondCard, actualSecondCard);
@@ -130,22 +100,16 @@ class MoneyTransferFirstCardTest {
     @Test
     void ShouldTopupFirstCard_EnormousValue_NotEmptyBalanceOfEachCard() {
 
-        DashboardPage dashboardPage = new DashboardPage();
-        PreBalanceInfo preBalanceInfo = new PreBalanceInfo();
+        int expectedFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int expectedSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
 
-        int expectedFirstCard = preBalanceInfo.getBalanceFirstCard();
-        int expectedSecondCard = preBalanceInfo.getBalanceSecondCard();
+        MoneyTtransferPage.depositFirstCard(DataHelper.getSecondCardInfo(),"9999999");
 
-        dashboardPage.setValue("9999999");
-        dashboardPage.depositFirstCard(DataHelper.getSecondCardInfo());
-
-        DashboardPage dashboardPage2 = new DashboardPage();
-        int actualFirstCard = dashboardPage2.getCardBalance("[data-test-id=\"92df3f1c-a033-48e6-8390-206f6b1f56c0\"]");
-        int actualSecondCard = dashboardPage2.getCardBalance("[data-test-id=\"0f3f5c2a-249e-4c3d-8287-09f7a039391d\"]");
+        int actualFirstCard = DashboardPage.getCardBalance(DataHelper.getFirstCardId());
+        int actualSecondCard = DashboardPage.getCardBalance(DataHelper.getSecondCardId());
 
         assertEquals(expectedFirstCard, actualFirstCard);
         assertEquals(expectedSecondCard, actualSecondCard);
     }
-
 }
 
